@@ -1,4 +1,6 @@
 import Admin from "../models/Admin.js";
+import Restaurant from "../models/Restaurant.js";
+
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -27,11 +29,18 @@ export const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
     const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const restaurant = await Restaurant.findOne({ adminId: admin._id });
+
     res.cookie("token", token, { httpOnly: true ,secure: false,sameSite: 'lax',  path: '/'}).json({ message: "Login successful",
       data:{ 
         user :{id: admin._id,
         email: admin.email,
-        restaurantName: 'Demo2 Restaurant2' },
+       name: restaurant.name,
+  address: restaurant.address,
+  phone: restaurant.phone,
+  logo: restaurant.logo,
+  description: restaurant.description,
+},
         token:token
         }});
   } catch (err) {

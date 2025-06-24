@@ -6,6 +6,8 @@ const restaurantSchema = new mongoose.Schema({
   address: String,
   phone: String,
   logo: String,
+  description: String,
+
 });
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);

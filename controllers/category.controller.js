@@ -1,7 +1,7 @@
 import Category from "../models/Category.js";
 import cloudinary from "../utils/cloudinary.js";
 import MenuItem from "../models/MenuItem.js";
-
+import Restaurant from "../models/Restaurant.js"
 
 
 const extractPublicId = (url) => {
@@ -44,6 +44,49 @@ console.log(imageUrl)
     res.status(500).json({ message: "Failed to create category", error });
   }
 };
+
+
+export const createRestaurant = async (req, res) => {
+  try {
+    const { name, address, phone ,description} = req.body;
+    const adminId = req.adminId; // from auth middleware
+    let logoUrl = "";
+
+    if (req.file) {
+      // Upload logo image to Cloudinary
+      logoUrl = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "restaurant_logos" },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result.secure_url);
+          }
+        );
+        uploadStream.end(req.file.buffer);
+      });
+    }
+
+    const restaurant = await Restaurant.create({
+      adminId,
+      name,
+      address,
+      phone,
+      description,
+      logo: logoUrl || ""
+    });
+    res.status(201).json({
+      message: "Restaurant created successfully",
+      restaurant,
+    });
+  } catch (error) {
+    console.error("❌ Restaurant creation error:", error);
+    res.status(500).json({
+      message: "Failed to create restaurant",
+      error: error.message || error,
+    });
+  }
+};
+
 
 export const updateCategory = async (req, res) => {
   try {
