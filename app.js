@@ -25,7 +25,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:8080",
-  "http://localhost:8081", // <-- Add more domains as needed
+  "http://localhost:8081","https://restaurant-server-menu.onrender.com" // <-- Add more domains as needed
 ];
 
 app.use(cors({
