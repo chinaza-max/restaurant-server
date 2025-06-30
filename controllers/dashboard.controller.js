@@ -21,7 +21,11 @@ export const getDashboardSummary = async (req, res) => {
     // --- Category Stats ---
     const categories = await Category.find({ adminId });
     const totalCategories = categories.length;
-    const categoryNames = categories.map(c => c.name).join(", ");
+    //const categoryNames = categories.map(c => c.name).join(", ");
+
+    const categoryNames  = totalCategories
+  ? categories.slice(0, 8).map(c => c.name).join(", ")
+  : "No categories found";
 
     // --- View Stats ---
     const now = new Date();
