@@ -35,7 +35,7 @@ export const login = async (req, res) => {
       data:{ 
         user :{id: admin._id,
         email: admin.email,
-       name: restaurant.name,
+       restaurantName: restaurant.name,
   address: restaurant.address,
   phone: restaurant.phone,
   logo: restaurant.logo,
